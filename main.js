@@ -1,33 +1,40 @@
-function getValidMoves([i, j]) {
-  if (i < 0 || j < 0) {
-    console.error("Invalid vertex.");
-    return []; // Early return to prevent undefined
+function knightMoves(start, end) {
+  const directions = [
+    [2, 1],
+    [1, 2],
+    [-1, 2],
+    [-2, 1],
+    [-2, -1],
+    [-1, -2],
+    [1, -2],
+    [2, -1],
+  ];
+
+  function isValid([x, y]) {
+    return x >= 0 && x < 8 && y >= 0 && y < 8;
   }
 
-  const validMoves = [];
+  const visited = new Set();
+  const queue = [{ position: start, path: [start] }];
 
-  function addValidMove(x, y) {
-    if (x >= 0 && x <= 7 && y >= 0 && y <= 7) {
-      validMoves.push([x, y]);
+  while (queue.length > 0) {
+    const current = queue.shift();
+    const [x, y] = current.position;
+
+    if (x === end[0] && y === end[1]) {
+      return current.path;
+    }
+
+    for (let [dx, dy] of directions) {
+      const next = [x + dx, y + dy];
+      const key = next.toString();
+
+      if (isValid(next) && !visited.has(key)) {
+        visited.add(key);
+        queue.push({ position: next, path: [...current.path, next] });
+      }
     }
   }
 
-  if (i + 2 <= 7) {
-    addValidMove(i + 2, j + 1);
-    addValidMove(i + 2, j - 1);
-  }
-  if (i - 2 >= 0) {
-    addValidMove(i - 2, j + 1);
-    addValidMove(i - 2, j - 1);
-  }
-  if (j + 2 <= 7) {
-    addValidMove(i + 1, j + 2);
-    addValidMove(i - 1, j + 2);
-  }
-  if (j - 2 >= 0) {
-    addValidMove(i + 1, j - 2);
-    addValidMove(i - 1, j - 2);
-  }
-
-  return validMoves;
+  return null; // theoretically unreachable on a normal 8x8 chessboard
 }
