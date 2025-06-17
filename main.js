@@ -38,3 +38,5 @@ function knightMoves(start, end) {
 
   return null; // theoretically unreachable on a normal 8x8 chessboard
 }
+
+console.log(knightMoves([0, 0], [7, 7]));
